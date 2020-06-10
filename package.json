@@ -1,0 +1,19 @@
+{
+  "name": "lighthouse",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node ./command.js -a http://ratehub.ca"
+  },
+  "files": [],
+  "author": "Sijoon Lee",
+  "license": "ISC",
+  "dependencies": {
+    "@oclif/command": "^1.6.1",
+    "@oclif/errors": "^1.2.2",
+    "chrome-launcher": "^0.13.2",
+    "lighthouse": "^6.0.0"
+  }
+}
