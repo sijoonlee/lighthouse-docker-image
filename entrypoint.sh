@@ -19,6 +19,6 @@ if [ $INPUT_WILL_EXIT_ON_FAIL == "yes" ]; then
     read passOrFail < passOrFail.txt
     echo $passOrFail
     if [ $passOrFail == "fail" ]; then 
-        exit 0
+        exit 1
     fi
 fi
