@@ -1,9 +1,9 @@
-# when you use this image at local machine
+# when you use this image at local machine(linux)
 
 ### use environment variable
 - type below on terminal
 ```
-export INPUT_TARGET_ADDRESS=https://ratehub.ca
+export INPUT_TARGET_ADDRESS=http://127.0.0.1:11111
 export INPUT_EXPORT_TO=html
 export INPUT_WILL_CHECK_PASS=yes
 export INPUT_MIN_PERFORMANCE=0.5
@@ -14,8 +14,9 @@ export INPUT_MIN_PWA=0.5
 ```
 - or "source set_env.sh"
 
-### docker run with env
-sudo docker container run --rm \
+### docker run with env to test localhost:8080
+sudo docker container run --network="host" --rm \
+-v ${pwd}:/usr/src/app/lighthouse-report \
 -e INPUT_TARGET_ADDRESS=$INPUT_TARGET_ADDRESS \
 -e INPUT_EXPORT_TO=$INPUT_EXPORT_TO \
 -e INPUT_WILL_CHECK_PASS=$INPUT_WILL_CHECK_PASS \
@@ -24,5 +25,8 @@ sudo docker container run --rm \
 -e INPUT_MIN_BEST_PRACTICES=$INPUT_MIN_BEST_PRACTICES \
 -e INPUT_MIN_SEO=$INPUT_MIN_SEO \
 -e INPUT_MIN_PWA=$INPUT_MIN_PWA \
-lighthouse-for-github-action
+sijoonlee/lighthouse-v2:latest
 
+
+### please refer
+https://stackoverflow.com/questions/24319662/from-inside-of-a-docker-container-how-do-i-connect-to-the-localhost-of-the-mach

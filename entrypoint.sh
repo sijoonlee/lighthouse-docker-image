@@ -9,3 +9,4 @@ node command.js --addr $INPUT_TARGET_ADDRESS \
                 --minBestPractices $INPUT_MIN_BEST_PRACTICES \
                 --minSEO $INPUT_MIN_SEO \
                 --minPWA $INPUT_MIN_PWA
+cp report.html ./lighthouse-report && echo "report file"

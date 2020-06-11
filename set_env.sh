@@ -1,5 +1,5 @@
 #!/bin/bash
-export INPUT_TARGET_ADDRESS=https://ratehub.ca
+export INPUT_TARGET_ADDRESS=127.0.0.1
 export INPUT_EXPORT_TO=html
 export INPUT_WILL_CHECK_PASS=yes
 export INPUT_MIN_PERFORMANCE=0.5

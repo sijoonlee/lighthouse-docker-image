@@ -25,6 +25,6 @@ RUN apt-get update && apt-get install -y \
 COPY package*.json ./
 RUN npm install
 COPY . .
+RUN mkdir lighthouse-report
 RUN chmod +x ./entrypoint.sh
 ENTRYPOINT ["./entrypoint.sh"]
-
