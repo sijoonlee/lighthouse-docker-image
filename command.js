@@ -9,7 +9,6 @@ class CustomCommand extends Command {
     await require('./runLighthouse').run(
       flags.addr, 
       flags.exportTo, 
-      flags.willCheckPass, 
       flags.minPerformance, 
       flags.minAccessibility, 
       flags.minBestPractices,
@@ -28,10 +27,6 @@ CustomCommand.flags = {
   exportTo: flags.string({
     char: 'e',
     default: 'none', // or 'html'
-  }),
-  willCheckPass: flags.string({
-    char: 'c',
-    default: 'no' // or 'yes' - it's string value, not boolean
   }),
   minPerformance: flags.string({
     default: 0.5

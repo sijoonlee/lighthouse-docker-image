@@ -56,15 +56,13 @@ const run = async (addr = 'https://ratehub.ca',
   let pass = true; // if one subject fail, it is considered as fail in total
   for (let [subject , score] of Object.entries(scoreCollect)){
     let passLabel = '';
-    if(willCheckPass === 'yes'){
-      if(score < minScores[subject]) {
-        passLabel = "fail";
-        pass = false;
-      } else {
-        passLabel = "pass";
-      }
-      passLabel += ` | minimum ${minScores[subject]}`;
+    if(score < minScores[subject]) {
+      passLabel = "fail";
+      pass = false;
+    } else {
+      passLabel = "pass";
     }
+    passLabel += ` | minimum ${minScores[subject]}`;
     console.log(subject, score, passLabel)
   }
   
