@@ -8,12 +8,17 @@ node command.js --addr $INPUT_TARGET_ADDRESS \
                 --minBestPractices $INPUT_MIN_BEST_PRACTICES \
                 --minSEO $INPUT_MIN_SEO \
                 --minPWA $INPUT_MIN_PWA
-if [ -r passOrFail.txt ]; then
-    cp passOrFail.txt ./lighthouse-report
-fi
 if [ -r report.json ]; then
     cp report.json ./lighthouse-report
 fi
 if [ -r report.html ]; then
     cp report.html ./lighthouse-report
+fi
+
+if [ $INPUT_WILL_EXIT_ON_FAIL == "yes" ]; then
+    read passOrFail < passOrFail.txt
+    echo $passOrFail
+    if [ $passOrFail == "fail" ]; then 
+        exit 0
+    fi
 fi

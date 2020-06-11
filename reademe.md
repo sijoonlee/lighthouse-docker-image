@@ -10,6 +10,7 @@ export INPUT_MIN_ACCESSIBILITY=0.5
 export INPUT_MIN_BEST_PRACTICES=0.5
 export INPUT_MIN_SEO=0.5
 export INPUT_MIN_PWA=0.5
+export INPUT_WILL_EXIT_ON_FAIL=yes
 ```
 - or "source set_env.sh"
 
@@ -23,6 +24,7 @@ sudo docker container run --network="host" --rm \
 -e INPUT_MIN_BEST_PRACTICES=$INPUT_MIN_BEST_PRACTICES \
 -e INPUT_MIN_SEO=$INPUT_MIN_SEO \
 -e INPUT_MIN_PWA=$INPUT_MIN_PWA \
+-e INPUT_WILL_EXIT_ON_FAIL=$INPUT_WILL_EXIT_ON_FAIL \
 sijoonlee/lighthouse-v2:latest
 
 ### please refer
