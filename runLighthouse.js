@@ -21,7 +21,6 @@ function launchChromeAndRunLighthouse(url, opts, config = null) {
 
 const run = async (addr = 'https://ratehub.ca', 
                   exportTo = 'none', 
-                  willCheckPass = 'no', 
                   minPerformance = 0.5,
                   minAccessibility = 0.5,
                   minBestPractices = 0.5,
@@ -53,12 +52,12 @@ const run = async (addr = 'https://ratehub.ca',
   let scoreCollect = {}
   Object.keys(lhr.categories).map( key => { scoreCollect[key] = lhr.categories[key]['score']})
  
-  let pass = true; // if one subject fail, it is considered as fail in total
+  let pass = true;
   for (let [subject , score] of Object.entries(scoreCollect)){
     let passLabel = '';
     if(score < minScores[subject]) {
       passLabel = "fail";
-      pass = false;
+      pass = false; // if any of 5 scores fails, it means the web didn't pass in overall
     } else {
       passLabel = "pass";
     }
@@ -66,13 +65,14 @@ const run = async (addr = 'https://ratehub.ca',
     console.log(subject, score, passLabel)
   }
   
-  await pWriteFile("passOrFail.txt", pass ? "pass" : "fail")
+  await pWriteFile("passOrFail.txt", pass ? "pass" : "fail") 
+  // to pass the result to bash shell, bash shell can use exit 1, which makes github action mark the action as 'fail'
 
-  if(exportTo === 'html'){
+  if(exportTo === 'html' | exportTo === 'both'){
     await pWriteFile("report.html", report);
   }
 
-  if(exportTo === 'json'){
+  if(exportTo === 'json' | exportTo === 'both'){
     await pWriteFile("report.json", JSON.stringify(lhr),'utf8', (err) => {
       if(err !== null)
         return console.error(err);
