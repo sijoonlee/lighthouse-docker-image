@@ -6,9 +6,10 @@ const {Command, flags} = require('@oclif/command')
 class CustomCommand extends Command {
   async run() {
     const {flags} = this.parse(CustomCommand)
-    await require('./runLighthouse').run(
+    await require('./runLighthouse').runTestWithFileList(
       flags.addr, 
-      flags.exportTo, 
+      flags.listOfFiles,
+      flags.exportTo,
       flags.minPerformance, 
       flags.minAccessibility, 
       flags.minBestPractices,
@@ -21,12 +22,13 @@ CustomCommand.flags = {
   version: flags.version(),
   help: flags.help(),
   addr: flags.string({
-    char: 'a',
-    default: 'http://ratehub.ca',
+    default: 'https://ratehub.ca',
+  }),
+  listOfFiles: flags.string({
+    default: 'null' // or path to the file
   }),
   exportTo: flags.string({
-    char: 'e',
-    default: 'none', // or 'html'
+    default: 'html', // or 'json' or 'both'
   }),
   minPerformance: flags.string({
     default: 0.5

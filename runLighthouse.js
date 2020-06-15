@@ -5,7 +5,7 @@ const readline = require('readline');
 const chromeLauncher = require('chrome-launcher');
 const lighthouse = require('lighthouse');
 const {URL} = require('url');
-const CHROME_OPTIONS = require('./chromeOption')
+const { CHROME_OPTIONS } = require('./chromeOption')
 
 // assuming listFile looks like below
 // a.html
@@ -30,22 +30,19 @@ const extractArrayFromFile = async (listFile) => {
   return array
 }
 
-const generateFileListUnderSingleAddress = (address, fileArray) => {
-  if(!address.endsWith("/"))
-    address += "/";
-
-  fileArray.push(""); // to test address itself
-  
-  let index = fileArray.indexOf("index.html")
-  if(index >= 0) { // -1 means not found
-    fileArray.splice(i, 1); // delete index.html in the list
+// example
+// hostAddress: http://localhost:11111
+// fileName: 404.html
+// will return: http://localhost:11111/404.html
+const generateAddress = (hostAddress, fileName) => {
+  if(!hostAddress.endsWith("/"))
+    hostAddress += "/";
+  return hostAddress + fileName
 }
 
-}
-
-const iterateTestOverArray = async (address = 'https://ratehub.ca', 
-                          fileArray = [], 
-                          exportTo = 'none', 
+const iterateTestOverArray = async (hostAddress = 'https://ratehub.ca', 
+                          fileArray = null, 
+                          exportTo = 'html', 
                           minPerformance = 0.5,
                           minAccessibility = 0.5,
                           minBestPractices = 0.5,
@@ -53,10 +50,18 @@ const iterateTestOverArray = async (address = 'https://ratehub.ca',
                           minPWA = 0.5 
   ) => {
 
-
-    for(let i = 0; i < fileArray.length ; i++ ){
-      await runTest(address+fileArray[i])
+    if(fileArray) {
+      for(let i = 0; i < fileArray.length ; i++ ){
+        const addr = generateAddress(hostAddress, fileArray[i]);
+        const fileNameWithoutExtension = fileArray[i].split(".")[0];
+        console.log("Testing on ", addr)
+        await runTest(addr, fileNameWithoutExtension, exportTo, minPerformance, minAccessibility, minBestPractices, minSEO, minPWA);  
+      };
+    } else {
+      console.log("Testing on", hostAddress)
+      await runTest(hostAddress, "", exportTo, minPerformance, minAccessibility, minBestPractices, minSEO, minPWA);  
     }
+    
 
 }
 
@@ -74,7 +79,8 @@ const launchChromeAndRunLighthouse = (address, opts = CHROME_OPTIONS, config = n
 }
 
 const runTest = async (address = 'https://ratehub.ca', 
-                  exportTo = 'none', 
+                  exportFileName = '', 
+                  exportTo = 'html',
                   minPerformance = 0.5,
                   minAccessibility = 0.5,
                   minBestPractices = 0.5,
@@ -106,16 +112,15 @@ const runTest = async (address = 'https://ratehub.ca',
     passLabel += ` | minimum ${minScores[subject]}`;
     console.log(subject, score, passLabel)
   }
-  
-  await pWriteFile("passOrFail.txt", pass ? "pass" : "fail") 
-  // to pass the result to bash shell, bash shell can use exit 1, which makes github action mark the action as 'fail'
+
+  console.log("Overall -------------------------->", pass ? "PASS" : "FAIL", "\n");
 
   if(exportTo === 'html' | exportTo === 'both'){
-    await pWriteFile("report.html", report);
+    await pWriteFile(`lighthouse-report/report-${exportFileName}.html`, report);
   }
 
   if(exportTo === 'json' | exportTo === 'both'){
-    await pWriteFile("report.json", JSON.stringify(lhr),'utf8', (err) => {
+    await pWriteFile(`lighthouse-report/report-${exportFileName}.json`, JSON.stringify(lhr),'utf8', (err) => {
       if(err !== null)
         return console.error(err);
     })
@@ -123,14 +128,34 @@ const runTest = async (address = 'https://ratehub.ca',
   
 };
 
+const runTestWithFileList = async (
+                  hostAddress, 
+                  pathToListFile = 'null',
+                  exportTo = 'html',
+                  minPerformance = 0.5,
+                  minAccessibility = 0.5,
+                  minBestPractices = 0.5,
+                  minSEO = 0.5,
+                  minPWA = 0.5
+  ) => {
+
+  console.log("Lighthouse test starts ... \n");
+  const fileArray = pathToListFile == 'null' ? null : await extractArrayFromFile(pathToListFile);
+  
+  await iterateTestOverArray(
+    hostAddress, 
+    fileArray,
+    exportTo,
+    minPerformance,
+    minAccessibility,
+    minBestPractices,
+    minSEO,
+    minPWA
+  )
+
+  console.log("Lighthouse test finished ... \n");
+}
+
 module.exports = {
-  run: runTest
+  runTestWithFileList
 }
-
-const a = async () => {
-  const array = await extractArrayFromFile("/home/sijoonlee/Document_2/github-action-study/lighthouse-image/files.txt")
-  console.log(array)
-}
-a();
-
-runTest();
