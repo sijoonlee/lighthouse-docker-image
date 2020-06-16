@@ -57,7 +57,6 @@ sudo docker container run --network="host" --rm \
 -e INPUT_MIN_BEST_PRACTICES=$INPUT_MIN_BEST_PRACTICES \
 -e INPUT_MIN_SEO=$INPUT_MIN_SEO \
 -e INPUT_MIN_PWA=$INPUT_MIN_PWA \
-test-lighthouse
 sijoonlee/lighthouse-v2:latest
 ```
 
@@ -69,7 +68,7 @@ https://stackoverflow.com/questions/24319662/from-inside-of-a-docker-container-h
 |Env|Description|Example Value|
 |------------------------|---------------------------------|----------------------|
 |INPUT_TARGET_ADDRESS    |The http address to be tested    |http://localhost:11111|
-|INPUT_LIST_OF_FILES     |The list of html files*          |path or 'null'        |
+|INPUT_LIST_OF_FILES     |The list of html files           |path or 'null'        |
 |INPUT_EXPORT_TO=html    |The test result will be exported |html / json / both    |
 |INPUT_MIN_PERFORMANCE   |Minimum performance score        |0 ~ 1                 |
 |INPUT_MIN_ACCESSIBILITY |Minimum accessibility score      |0 ~ 1                 |
@@ -77,3 +76,5 @@ https://stackoverflow.com/questions/24319662/from-inside-of-a-docker-container-h
 |INPUT_MIN_SEO           |Minimum SEO score                |0 ~ 1                 |
 |INPUT_MIN_PWA           |Minimum progressive web app score|0 ~ 1                 |
 
+# Github workflow example  
+https://github.com/sijoonlee/github-action-playground
