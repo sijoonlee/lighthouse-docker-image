@@ -2,7 +2,6 @@
 # https://github.com/foo-software/lighthouse-check/blob/master/Dockerfile
 FROM node:14.4.0-slim
 WORKDIR /usr/src/app
-# Install deps + add Chrome Stable + purge all the things
 RUN apt-get update && apt-get install -y \
   apt-transport-https \
   ca-certificates \
@@ -14,19 +13,13 @@ RUN apt-get update && apt-get install -y \
   && apt-get update && apt-get install -y \
   google-chrome-stable \
   fontconfig \
-  fonts-ipafont-gothic \
-  fonts-wqy-zenhei \
-  fonts-thai-tlwg \
-  fonts-kacst \
-  fonts-symbola \
-  fonts-noto \
-  fonts-freefont-ttf \
   --no-install-recommends \
   && apt-get purge --auto-remove -y curl gnupg \
   && rm -rf /var/lib/apt/lists/*
 COPY package*.json ./
 RUN npm install
 COPY . .
+# will use this folder for volume
 RUN mkdir lighthouse-report
 RUN chmod +x ./entrypoint.sh
 ENTRYPOINT ["./entrypoint.sh"]
