@@ -126,6 +126,11 @@ const runTest = async (address = 'https://ratehub.ca',
     })
   }
   
+  if(!pass) {
+    process.exit(1);
+  }
+
+
 };
 
 const runTestWithFileList = async (
